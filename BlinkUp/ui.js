@@ -2,12 +2,12 @@
 var blinkUpTemplate;
 var countDownTimer;
 var activeLightbox = null;
-function isOnMobile () {
+function isOnMobile() {
   return (/tablet|pad|mobile|phone|symbian|android|ipod|ios|blackberry|webos/i.test(navigator.userAgent));
 }
 
-$(function() {
-  $('#ethernet,#wireless').change(function() {
+$(function () {
+  $('#ethernet,#wireless').change(function () {
     $('#password').val('');
     $('#ssid').val('');
     $('#password').parent().slideToggle('100');
@@ -65,7 +65,7 @@ window.onload = (function () {
 *                       indicating type of BlinkUp to perform
 *
 */
-function blinkUp (environment) { // eslint-disable-line no-unused-vars
+function blinkUp(environment) { // eslint-disable-line no-unused-vars
   if (environment === 'disconnect') {
     disconnectDevice();
   } else {
@@ -83,7 +83,7 @@ function blinkUp (environment) { // eslint-disable-line no-unused-vars
 *
 * @param {string} errorMessage  A string containing the error to display
 */
-function showError (errorMessage) {
+function showError(errorMessage) {
   var configuration = {
     closeOnClick: true,
     closeOnEsc: true,
@@ -113,7 +113,7 @@ function showError (errorMessage) {
 /**
 * Cancel currently active BlinkUp process (i.e. flashing or polling)
 */
-function cancelBlinkUp () {
+function cancelBlinkUp() {
   if (countDownTimer !== null) {
     clearInterval(countDownTimer);
   }
@@ -127,33 +127,33 @@ function cancelBlinkUp () {
 /**
 * This is registered when a countdown begins to prevent events from occuring
 */
-function captureEvent (e) {
+function captureEvent(e) {
   e.preventDefault();
 }
 
 /**
 * Perform BlinkUp flashing for disconnecting a device
 */
-function disconnectDevice () {
+function disconnectDevice() {
   document.body.addEventListener('touchmove', captureEvent);
   if (configureLightbox(true)) {
     startCountdown(function () {
       setInstruction('Do not move the device');
 
       // Perform the BlinkUp (flashing)
-      BU.startDisconnectFlash({},
-      function () {
-        // Hide the canvas and progress bar now that BlinkUp is complete
-        hideFlashingElements();
-        hidePollingProgress();
+      BU.startDisconnectFlash({ fps: 20 },
+        function () {
+          // Hide the canvas and progress bar now that BlinkUp is complete
+          hideFlashingElements();
+          hidePollingProgress();
 
-        // Display the results as success
-        setInstruction('Complete');
-        document.getElementById('status').style.display = 'block';
-        showResult('Your device should now be flashing amber', true);
-        return;
-      }
-    );
+          // Display the results as success
+          setInstruction('Complete');
+          document.getElementById('status').style.display = 'block';
+          showResult('Your device should now be flashing amber', true);
+          return;
+        }
+      );
     });
     setInstruction('Press the device sensor against the screen within the blue box');
   }
@@ -164,7 +164,7 @@ function disconnectDevice () {
 *
 * @returns {BU.StaticAddressing} Network information or null
 */
-function getAddressing () {
+function getAddressing() {
   var addressingData = null;
   var ip = document.getElementById('static_ip').value.trim();
   var netmask = document.getElementById('static_netmask').value.trim();
@@ -189,7 +189,7 @@ function getAddressing () {
 *
 * @returns {BU.NetworkProxy} Proxy information or null
 */
-function getProxy () {
+function getProxy() {
   var address = document.getElementById('proxy_address').value.trim();
   var port = document.getElementById('proxy_port').value.trim();
   var username = document.getElementById('proxy_username').value.trim();
@@ -214,7 +214,7 @@ function getProxy () {
 * @param {string} environment  Either 'production', or 'disconnect'
 *                       indicating type of BlinkUp to perform
 */
-function flash (apiKey, environment) {
+function flash(apiKey, environment) {
   document.body.addEventListener('touchmove', captureEvent);
   if (configureLightbox(false)) {
     showCountdownState();
@@ -242,7 +242,7 @@ function flash (apiKey, environment) {
 *
 * @param {BU.ConfigId} configId The ConfigId to be used for configuring the device
 */
-function flashWithConfig (configId) {
+function flashWithConfig(configId) {
   startCountdown(function () {
     var networkConfig = new BU.NetworkConfig({
       ssid: '',
@@ -257,24 +257,25 @@ function flashWithConfig (configId) {
     }
 
     var options = {
+      fps: 20
     };
 
     setInstruction('Do not move the device');
-  // BU.pollTimeout = 60;
-  // Perform the BlinkUp (flashing)
+    // BU.pollTimeout = 60;
+    // Perform the BlinkUp (flashing)
     BU.startNetworkFlash(configId, networkConfig, options,
-    function () {
-      // Hide the canvas and progress bar now that BlinkUp is complete
-      hideFlashingElements();
+      function () {
+        // Hide the canvas and progress bar now that BlinkUp is complete
+        hideFlashingElements();
 
-      // Show status of device polling
-      setInstruction('Gathering device data (' + BU.pollTimeout + 's max)');
-      document.getElementById('status').style.display = 'block';
-      showPolling();
+        // Show status of device polling
+        setInstruction('Gathering device data (' + BU.pollTimeout + 's max)');
+        document.getElementById('status').style.display = 'block';
+        showPolling();
 
-      // Poll the device for results of the BlinkUp process
-      getDeviceStatus(configId);
-    });
+        // Poll the device for results of the BlinkUp process
+        getDeviceStatus(configId);
+      });
   });
 }
 
@@ -283,7 +284,7 @@ function flashWithConfig (configId) {
 *
 * @param {BU.ConfigId} configId The ConfigId used during startNetworkFlash
 */
-function getDeviceStatus (configId) {
+function getDeviceStatus(configId) {
   BU.pollForDeviceInfo(configId, function (err, deviceInfo) {
     // Show the process is finished and hide the polling progress
     hidePollingProgress();
@@ -329,7 +330,7 @@ function getDeviceStatus (configId) {
 * Open a lightbox if one does not exist. If one is already open, cancel any
 * actions and set the content. In this the configuration will be ignored
 */
-function openLightboxSingleton (content, configuration) {
+function openLightboxSingleton(content, configuration) {
   if (activeLightbox !== null) {
     if (countDownTimer !== null) {
       clearInterval(countDownTimer);
@@ -347,7 +348,7 @@ function openLightboxSingleton (content, configuration) {
 * Hide progress bar and BlinkUp canvas
 * @param {int} hideSpeed The speed at which to transition (optional)
 */
-function hideFlashingElements (hideSpeed) {
+function hideFlashingElements(hideSpeed) {
   if (typeof hideSpeed === 'undefined' || hideSpeed < 0) {
     hideSpeed = 400;
   }
@@ -360,7 +361,7 @@ function hideFlashingElements (hideSpeed) {
 /**
 * Show progress activity monitor gif
 */
-function showPolling () {
+function showPolling() {
   $('status').show(400);
   $('#progress-img').show(400);
 }
@@ -368,7 +369,7 @@ function showPolling () {
 /**
 * Hide progress activity monitor gif
 */
-function hidePollingProgress () {
+function hidePollingProgress() {
   $('status').show(400);
   $('.progress').hide(400);
   $('#progress-img').hide();
@@ -380,7 +381,7 @@ function hidePollingProgress () {
 * @param {string} instructionString Set the instructions to put in the lightbox
 *                                   title field
 */
-function setInstruction (instructionString) {
+function setInstruction(instructionString) {
   var instructions = document.getElementById('current-instruction');
   instructions.innerHTML = instructionString;
 }
@@ -392,7 +393,7 @@ function setInstruction (instructionString) {
 * @param {bool} success Indicates whether or not the result is a success or
 *                       a failure and colours the result string accordingly
 */
-function showResult (resultString, success) {
+function showResult(resultString, success) {
   var result = document.getElementById('result');
   result.innerHTML = resultString;
   if (success === true) {
@@ -405,7 +406,7 @@ function showResult (resultString, success) {
 /**
 * Hide BlinkUp process results
 */
-function hideResult () {
+function hideResult() {
   var result = document.getElementById('result');
   result.innerHTML = '';
   result.className = 'hidden';
@@ -417,7 +418,7 @@ function hideResult () {
 * @param {bool} isDisconnectDevice  Indicates whether this is a disconnect device
 *               operation; if false, does not validate network credentials
 */
-function configureLightbox (isDisconnectDevice) {
+function configureLightbox(isDisconnectDevice) {
   // If configuring a wireless network, need a SSID
   if (isDisconnectDevice !== true && document.getElementById('wireless').checked && document.getElementById('ssid').value === '') {
     var incompleteNetworkConfigurationMessage = 'Please provide a complete wireless network configuration';
@@ -493,7 +494,7 @@ function configureLightbox (isDisconnectDevice) {
 /**
 *  Configure the lightbox for a countdown
 */
-function showCountdownState () {
+function showCountdownState() {
   // Initialize BlinkUp and result elements; show progress bar but hide canvas
   // until countdown is over
   document.getElementById('countdown').style.display = 'block';
@@ -508,7 +509,7 @@ function showCountdownState () {
 *
 * @param {function} callback Called after lightbox is displayed
 */
-function startCountdown (callback) {
+function startCountdown(callback) {
   showCountdownState();
   setInstruction('Press the device sensor against the screen within the blue box');
 
