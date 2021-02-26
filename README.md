@@ -1,0 +1,7 @@
+# ElectricIMP
+
+JavaScript BlinkUp library might be used to deliver BlinkUp through a mobile browser. The term ‘mobile browser’ includes not only web browsers on mobile devices but also web browser functionality integrated into native mobile apps. Web browser apps will require the JavaScript and entry point HTML to be stored on a remote server as part of a web app. The use of a web browser view within a native app allows the code to be stored locally, inside the app itself.
+
+The code provided with this Read Me forms a complete working example of JavaScript BlinkUp. It is aimed at commercial customers who are preparing JavaScript BlinkUp-based web app(s) for the imp-enabled connected products. Customers will require an API key (see below).
+
+To produce a commercial web app, it is necessary to create a UI which prompts the user for the required network configuration information and, once the BlinkUp process has been initiated by the user, assists the user through the BlinkUp process. The app should also guide the end-user through preparing their device fro BlinkUp: for example, instructing them to put their device’s display on a high brightness setting (see ‘Limitations’, above). An end-user facing web app would not require the user to enter an API key — this should retrieved at runtime from the customer’s server in a secure manner. Depending on the nature of the connected product, not all of the configuration options presented by this example may be needed in the web app.
