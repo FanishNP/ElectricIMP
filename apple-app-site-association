@@ -1,0 +1,21 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "4W59Y626BJ.com.nanoprecise.com",
+                "paths": ["*"]
+            },
+            {
+                "appID": "4W59Y626BJ.com.nanoprecise.qrscanner",
+                "paths": ["*"]
+            }
+        ]
+    },
+    "webcredentials": {
+        "apps": [
+            "4W59Y626BJ.com.nanoprecise.com",
+            "4W59Y626BJ.com.nanoprecise.qrscanner"
+        ]
+    },
+}
